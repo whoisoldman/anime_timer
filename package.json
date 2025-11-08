@@ -1,0 +1,10 @@
+{
+  "name": "animated-timer",
+  "version": "1.0.0",
+  "description": "Учебный проект: анимированный таймер (неоморфизм)",
+  "scripts": {
+    "start": "npx serve -p 5173 ."
+  },
+  "devDependencies": {},
+  "license": "MIT"
+}

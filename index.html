@@ -1,0 +1,264 @@
+<!DOCTYPE html>
+<html lang="ru">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Mr.OLDMAN Timer</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="./style.css" />
+    <!-- Critical CSS preloader -->
+    <style>
+      :root {
+        --neu-bg: #e8eef6;
+        --prelogo-speed: 3.1s;
+      }
+
+      #preloader {
+        position: fixed;
+        inset: 0;
+        z-index: 2147483647;
+        background: var(--neu-bg, #e8eef6);
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        opacity: 1;
+        visibility: visible;
+        transition: opacity 1.31s ease, visibility 1.5s ease;
+        height: 100dvh;
+        width: 100vw;
+        transform: translateZ(0);
+        contain: paint;
+      }
+      #preloader.is-hidden {
+        opacity: 0;
+        visibility: hidden;
+      }
+
+      /* Logo like <img> - without mask, cross-browser */
+      .prelogo-img {
+        width: 131px;
+        height: auto;
+        display: block;
+        animation: prelogo-breathe var(--prelogo-speed) ease-in-out infinite;
+        filter: drop-shadow(-6px -6px 16px #ffffff)
+          drop-shadow(6px 6px 16px #c7cfdb);
+        will-change: transform, filter;
+      }
+      @keyframes prelogo-breathe {
+        0%,
+        100% {
+          transform: scale(0.71);
+          filter: drop-shadow(-4px -4px 12px #ffffff)
+            drop-shadow(4px 4px 12px #c7cfdb);
+        }
+        50% {
+          transform: scale(1.04);
+          filter: drop-shadow(-6px -6px 18px #ffffff)
+            drop-shadow(6px 6px 18px #c7cfdb);
+        }
+      }
+
+      html.preload-lock,
+      body.preload-lock {
+        overflow: hidden;
+      }
+    </style>
+
+    <!-- Early JS: start/hiding rules -->
+    <script>
+      (function () {
+        // Минимальная длительность показа
+        var MIN_PRELOAD_TIME = 3100; // 3.1s
+        var HARD_TIMEOUT = 10000; // 10s insurance
+        var start = performance.now ? performance.now() : Date.now();
+
+        // Called when ready to hide
+        function scheduleHide() {
+          var pre = document.getElementById("preloader");
+          if (!pre || pre.classList.contains("is-hidden")) return;
+          var now = performance.now ? performance.now() : Date.now();
+          var elapsed = now - start;
+          var remain = Math.max(0, MIN_PRELOAD_TIME - elapsed);
+
+          setTimeout(function () {
+            pre.classList.add("is-hidden");
+            document.documentElement.classList.remove("preload-lock");
+            document.body.classList.add("preload-done"); // card fade trigger
+            setTimeout(function () {
+              pre.remove && pre.remove();
+            }, 600);
+          }, remain);
+        }
+
+        // Лочим скролл сразу
+        document.documentElement.classList.add("preload-lock");
+
+        // If everything is already loaded (cache), we still maintain the minimum
+        if (document.readyState === "complete") {
+          window.addEventListener("load", scheduleHide, { once: true });
+          // In case load has already been processed synchronously, we’ll still call:
+          setTimeout(scheduleHide, 0);
+        } else {
+          window.addEventListener("load", scheduleHide, { once: true });
+        }
+
+        // Insurance: hide through a hard timeout even if the load has not arrived
+        setTimeout(scheduleHide, HARD_TIMEOUT);
+
+        // When returning from bfcache, some browsers skip load -
+        // force the minimum:
+        // принудительно соблюдаем минимум:
+        window.addEventListener(
+          "pageshow",
+          function (e) {
+            if (e.persisted) scheduleHide();
+          },
+          { once: true }
+        );
+      })();
+    </script>
+  </head>
+  <body
+    class="min-h-screen bg-[#e8eef6] text-slate-700 flex items-center justify-center p-4"
+  >
+    <!-- Preloader overlay -->
+    <div id="preloader" aria-live="polite" aria-busy="true">
+      <span class="prelogo-wrap">
+        <img class="prelogo-img" src="./mroldman_logo.png" alt="Mr.OLDMAN" />
+        <span class="prelogo-grad" aria-hidden="true"></span>
+      </span>
+    </div>
+
+    <main
+      class="timer-card relative max-w-md w-full rounded-3xl p-6 sm:p-8 shadow-neu bg-[#e8eef6]"
+    >
+      <span class="logo-emboss logo-emboss--inset" aria-hidden="true"></span>
+      <!-- Language toggle: single compact button inside the card -->
+      <div class="absolute top-3 right-3">
+        <button id="langToggle" class="lang-btn" aria-label="Switch language">
+          EN
+        </button>
+      </div>
+
+      <!-- Title (translated via data-i18n) -->
+      <h1
+        class="ty-title mb-6 text-center text-[clamp(1.25rem,4vw,1.75rem)]"
+        data-i18n="title"
+      >
+        Таймер
+      </h1>
+
+      <!-- SVG circular progress -->
+      <div class="w-56 h-56 mx-auto relative mb-6">
+        <svg
+          class="w-full h-full"
+          viewBox="0 0 100 100"
+          role="img"
+          aria-label="Индикатор прогресса"
+        >
+          <defs>
+            <filter id="glow">
+              <feGaussianBlur stdDeviation="1.5" result="coloredBlur" />
+              <feMerge>
+                <feMergeNode in="coloredBlur" />
+                <feMergeNode in="SourceGraphic" />
+              </feMerge>
+            </filter>
+          </defs>
+          <!-- Background track (12 o'clock start) -->
+          <circle
+            cx="50"
+            cy="50"
+            r="45"
+            stroke="#d7deea"
+            stroke-width="8"
+            fill="none"
+            transform="rotate(-90 50 50)"
+          />
+          <!-- Progress path (12 o'clock start) -->
+          <circle
+            id="progressCircle"
+            cx="50"
+            cy="50"
+            r="45"
+            stroke="#18a957"
+            stroke-width="8"
+            stroke-linecap="round"
+            fill="none"
+            filter="url(#glow)"
+            stroke-dasharray="282.743"
+            stroke-dashoffset="282.743"
+            class="transition-[stroke] duration-300 ease-linear"
+            transform="rotate(-90 50 50)"
+          />
+          <!-- Centered time text -->
+          <g aria-hidden="true">
+            <text
+              id="timeText"
+              x="50"
+              y="50"
+              text-anchor="middle"
+              dominant-baseline="middle"
+              class="tnum fill-slate-700"
+              style="
+                font: 700 16px/1.2 ui-sans-serif, system-ui, -apple-system,
+                  Segoe UI, Roboto, Helvetica, Arial;
+              "
+            >
+              00:00
+            </text>
+          </g>
+        </svg>
+        <div
+          id="flashOverlay"
+          class="absolute inset-0 rounded-full pointer-events-none opacity-0"
+        ></div>
+      </div>
+
+      <!-- Input -->
+      <label for="minutes" class="ty-caption" data-i18n="labelDuration"
+        >Длительность (мин)</label
+      >
+      <input
+        id="minutes"
+        type="number"
+        min="1"
+        max="99"
+        inputmode="numeric"
+        pattern="[0-9]*"
+        class="w-full h-12 px-4 py-3 rounded-2xl shadow-inset-neu outline-none bg-[#e8eef6] mb-4"
+        placeholder="1–99"
+        aria-describedby="messages"
+      />
+
+      <!-- Controls -->
+      <div class="grid grid-cols-2 gap-3 mb-4">
+        <button
+          id="startPause"
+          class="btn w-full"
+          aria-label="Старт / Пауза"
+          data-i18n="btnStart"
+        >
+          Старт
+        </button>
+        <button
+          id="restart"
+          class="btn w-full"
+          aria-label="Перезапуск"
+          data-i18n="btnRestart"
+        >
+          Перезапуск
+        </button>
+      </div>
+
+      <!-- Messages area: fixed same height as input -->
+      <div
+        id="messages"
+        class="message-box h-12 rounded-2xl shadow-inset-neu px-4 py-3 text-sm flex items-center overflow-hidden"
+        aria-live="polite"
+      ></div>
+    </main>
+
+    <script src="./script.js"></script>
+  </body>
+</html>
