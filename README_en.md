@@ -74,7 +74,7 @@ Open `http://localhost:8000` in the browser.
 ## 👤 Author & License
 MIT License
 
-Copyright ©2025, [Aleksei N. Andeev (Mr.OLDMAN)](https://github.com/whoisoldman)
+Copyright ©2025, [Aleksei N. Andeev (Mr.OLDMAN)](https://github.com/whoisoldman/whoisoldman.github.io)
 
 Permission is hereby granted, free of charge, to any person obtaining a copy
 of this software and associated documentation files (the "Software"), to deal
