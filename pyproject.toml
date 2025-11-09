@@ -1,0 +1,28 @@
+[project]
+name = "anime-timer"
+version = "0.1.0"
+description = "Animated timer served via FastAPI (static hosting)"
+readme = "README.md"
+requires-python = ">=3.12"
+license = { text = "MIT" }
+authors = [{ name = "Aleksei N. Andreev" }]
+
+dependencies = [
+  "fastapi>=0.115.0",
+  "uvicorn[standard]>=0.30.0",
+]
+
+[tool.ruff]
+line-length = 100
+target-version = "py312"
+lint.select = ["E","F","I","UP","B","N","W"]
+lint.ignore = ["E501"]
+
+[tool.ruff.format]
+quote-style = "double"
+indent-style = "space"
+docstring-code-format = true
+
+[build-system]
+requires = ["hatchling"]
+build-backend = "hatchling.build"
