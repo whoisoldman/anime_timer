@@ -280,7 +280,6 @@
   }
 
   function startFromMinutes(min) {
-    // first launch - activate Restart
     if (!hasStartedOnce) {
       hasStartedOnce = true;
       updateRestartState();
@@ -303,7 +302,7 @@
     tick();
     if (tickTimer) clearInterval(tickTimer);
     tickTimer = setInterval(tick, 250);
-    showMessage("good", t("msgStarted"), { timeoutMs: 2000 });
+    showMessage("good", t("msgStarted"), { timeoutMs: 5000 });
   }
 
   function tick() {
@@ -337,7 +336,6 @@
       isRunning = false;
       setTexts();
 
-      // When finished, a sticky combo message
       showMessage("err", t("msgTimesUpReady"), {
         sticky: true,
         key: "timesup",
@@ -347,13 +345,12 @@
       progressCircle.classList.remove("blink-opacity");
       flashOverlay.classList.remove("blink-overlay");
 
-      endLock = true; // block Start until Restart or duration change
+      endLock = true;
       updateStartLock();
       setTexts();
     }
   }
 
-  // ===== Events =====
   startPauseBtn.addEventListener("click", () => {
     if (endLock) return;
 
@@ -410,7 +407,7 @@
     minutesInput.value = useMin;
     startFromMinutes(useMin);
     showMessage("good", t("msgRestartedFor", { m: useMin }), {
-      timeoutMs: 2500,
+      timeoutMs: 5000,
     });
   });
 
@@ -451,8 +448,6 @@
       const n = clamp(parseInt(cleaned, 10) || 0, 1, 99);
       if (String(n) !== cleaned) minutesInput.value = String(n);
 
-      // If after the end a DIFFERENT duration is entered,
-      // remove the block and clear the state for a “clean start”
       if (endLock && n !== lastDurationMin) {
         endLock = false;
         isRunning = false;
@@ -474,22 +469,14 @@
     }
   });
 
-  // ===== Initial render & language setup =====
+  // Init
   timeText.textContent = fmt(0);
   applyLang();
-
-  // primary initialization: Restart is disabled, sticky “Ready to Start!”
   hasStartedOnce = false;
   updateRestartState();
   showMessage("info", t("msgReadyStart"), { sticky: true, key: "ready" });
-
   updateStartLock();
   minutesInput.focus();
-
-  // Hide the preloader after the page assets are fully loaded
   window.addEventListener("load", hidePreloader);
-
-  // Just in case: if something external takes a long time to load, but the UI is already ready -
-  // you can hide the preloader when everything has initialized the timer (last line of init):
   hidePreloader();
 })();

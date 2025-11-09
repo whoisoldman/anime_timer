@@ -1,8 +1,8 @@
 html,
 body {
-  font-family: -apple-system, BlinkMacSystemFont, "SF Pro Text",
-    "SF Pro Display", "Segoe UI", Roboto, Helvetica, Arial, "Apple Color Emoji",
-    "Segoe UI Emoji", "Segoe UI Symbol", sans-serif;
+  font-family: -apple-system, BlinkMacSystemFont, "SF Pro Text", "SF Pro Display",
+    "Segoe UI", Roboto, Helvetica, Arial, "Apple Color Emoji", "Segoe UI Emoji",
+    "Segoe UI Symbol", sans-serif;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
   text-rendering: optimizeLegibility;
@@ -12,317 +12,86 @@ body {
   --neu-bg: #e8eef6;
   --neu-light: #ffffff;
   --neu-dark: #c7cfdb;
+  --prelogo-tint: 0.75;
 }
 
-/* Header in apple.com style - dense, with minimal tracking */
-.ty-title {
-  font-weight: 700;
-  letter-spacing: -0.01em;
-  line-height: 1.15;
-  font-size: clamp(22px, 3.6vw, 28px);
-}
+/* Typography */
+.ty-title { font-weight: 700; letter-spacing: -0.01em; line-height: 1.15; font-size: clamp(22px, 3.6vw, 28px); }
+.ty-body  { font-weight: 400; letter-spacing: 0; line-height: 1.45; font-size: clamp(15px, 2.1vw, 17px); color: #3b4452; }
+.ty-caption { font-weight: 500; letter-spacing: 0; line-height: 1.35; font-size: 13px; color: #5b6574; }
+.tnum { font-variant-numeric: tabular-nums; font-feature-settings: "tnum" 1; }
 
-/* Subheadings/plain text */
-.ty-body {
-  font-weight: 400;
-  letter-spacing: 0;
-  line-height: 1.45;
-  font-size: clamp(15px, 2.1vw, 17px);
-  color: #3b4452;
-}
-
-/* Small signatures */
-.ty-caption {
-  font-weight: 500;
-  letter-spacing: 0;
-  line-height: 1.35;
-  font-size: 13px;
-  color: #5b6574;
-}
-
-/* Timer digits - fixed width */
-.tnum {
-  font-variant-numeric: tabular-nums;
-  font-feature-settings: "tnum" 1;
-}
-
-/* ===== Neumorphism base ===== */
-.timer-card {
-  background: #e8eef6;
-}
-
-.shadow-neu {
-  box-shadow: 12px 12px 24px #c7cfdb, -12px -12px 24px #ffffff;
-}
-.shadow-inset-neu {
-  box-shadow: inset 8px 8px 16px #c7cfdb, inset -8px -8px 16px #ffffff;
-}
+/* Neumorphism */
+.timer-card { background: #e8eef6; position: relative; }
+.shadow-neu { box-shadow: 12px 12px 24px #c7cfdb, -12px -12px 24px #ffffff; }
+.shadow-inset-neu { box-shadow: inset 8px 8px 16px #c7cfdb, inset -8px -8px 16px #ffffff; }
 
 /* Buttons */
 .btn {
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
-  gap: 0.5rem;
-  padding: 0.75rem 1rem;
-  border-radius: 1rem;
-  background: #e8eef6;
+  display: inline-flex; align-items: center; justify-content: center; gap: .5rem;
+  padding: .75rem 1rem; border-radius: 1rem; background: #e8eef6;
   box-shadow: 8px 8px 16px #c7cfdb, -8px -8px 16px #ffffff;
-  font-weight: 600;
-  transition: transform 0.05s ease, box-shadow 0.2s ease;
-  min-height: 48px;
+  font-weight: 600; transition: transform .05s ease, box-shadow .2s ease; min-height: 48px;
 }
-.btn:active {
-  transform: translateY(1px);
-  box-shadow: 6px 6px 12px #c7cfdb, -6px -6px 12px #ffffff;
-}
+.btn:active { transform: translateY(1px); box-shadow: 6px 6px 12px #c7cfdb, -6px -6px 12px #ffffff; }
+.btn:disabled { opacity: .6; cursor: not-allowed; transform: none !important;
+  box-shadow: inset 8px 8px 16px #c7cfdb, inset -8px -8px 16px #ffffff; }
 
-.btn:disabled {
-  opacity: 0.6;
-  cursor: not-allowed;
-  transform: none !important;
-  /* looks “bulged”, like an inactive element in neomorphism */
-  box-shadow: inset 8px 8px 16px #c7cfdb, inset -8px -8px 16px #ffffff;
-}
+/* Lang toggle */
+.lang-btn { padding: .25rem .5rem; border-radius: .75rem; background: #e8eef6;
+  box-shadow: 6px 6px 12px #c7cfdb, -6px -6px 12px #ffffff; font-size: .8rem; font-weight: 700; }
 
-/* Language toggle minimal button */
-.lang-btn {
-  padding: 0.25rem 0.5rem;
-  border-radius: 0.75rem;
-  background: #e8eef6;
-  box-shadow: 6px 6px 12px #c7cfdb, -6px -6px 12px #ffffff;
-  font-size: 0.8rem;
-  font-weight: 700;
-}
+/* Overlays & blinks */
+#flashOverlay.blink-overlay { animation: flash 1s linear infinite; }
+@keyframes flash { 0%,100%{opacity:0;} 50%{opacity:.25;} }
+.blink-opacity { animation: blinkOpacity 1s linear infinite; }
+@keyframes blinkOpacity { 0%,100%{opacity:1;} 50%{opacity:.5;} }
 
-/* Red time overlay blink (used only in last seconds) */
-#flashOverlay.blink-overlay {
-  animation: flash 1s linear infinite;
-}
-@keyframes flash {
-  0%,
-  100% {
-    opacity: 0;
-  }
-  50% {
-    opacity: 0.25;
-  }
-}
+/* Messages */
+.message-box .msg { margin: 2px 0; white-space: nowrap; text-overflow: ellipsis; overflow: hidden; }
+.msg-info { color:#0b6bcb; } .msg-warn{ color:#b3620f; } .msg-err{ color:#b3162a; } .msg-good{ color:#16833a; }
 
-/* Generic blink (used for pause + last seconds on the stroke) */
-.blink-opacity {
-  animation: blinkOpacity 1s linear infinite;
-}
-@keyframes blinkOpacity {
-  0%,
-  100% {
-    opacity: 1;
-  }
-  50% {
-    opacity: 0.5;
-  }
-}
-
-/* Message line style */
-.message-box .msg {
-  margin: 2px 0;
-  white-space: nowrap;
-  text-overflow: ellipsis;
-  overflow: hidden;
-}
-.msg-info {
-  color: #0b6bcb;
-}
-.msg-warn {
-  color: #b3620f;
-}
-.msg-err {
-  color: #b3162a;
-}
-.msg-good {
-  color: #16833a;
-}
-
-/* Placeholder (RU / EN via html[lang])
-#messages:empty::before {
-  content: "Сообщения…";
-  opacity: 0.6;
-}
-html[lang="en"] #messages:empty::before {
-  content: "Messages…";
-} */
-
-/* Basic logo container (PNG mask) */
+/* Embossed logo inside the card (PNG mask) */
 .logo-emboss {
-  position: absolute;
-  top: 14px;
-  left: 14px;
-  width: 91px;
-  height: 71px;
-  display: block;
-  pointer-events: none;
-  z-index: 1;
-
-  /* light inner fill for readability on a light background */
-  background: linear-gradient(131deg, #d3d2d2 0%, #000000 100%);
-  opacity: 1;
-
-  /* маска — центрируем и не обрезаем */
-  -webkit-mask-image: url("./mroldman_logo.png");
-  mask-image: url("./mroldman_logo.png");
-  -webkit-mask-repeat: no-repeat;
-  mask-repeat: no-repeat;
-  -webkit-mask-position: center;
-  mask-position: center;
-  -webkit-mask-size: contain;
-  mask-size: contain;
+  position: absolute; top: 14px; left: 14px; width: 91px; height: 71px;
+  display: block; pointer-events: none; z-index: 1;
+  background: linear-gradient(131deg, #d3d2d2 0%, #000000 100%); opacity: 1;
+  -webkit-mask-image: url("./mroldman_logo.png"); mask-image: url("./mroldman_logo.png");
+  -webkit-mask-repeat: no-repeat; mask-repeat: no-repeat;
+  -webkit-mask-position: center; mask-position: center;
+  -webkit-mask-size: contain; mask-size: contain;
 }
-
-/* inset shadows like .shadow-inset-neu, but a little stronger so that the shape is visible */
 .logo-emboss::before {
-  content: "";
-  position: absolute;
-  inset: 1;
-  -webkit-mask-image: inherit;
-  mask-image: inherit;
-  -webkit-mask-repeat: inherit;
-  mask-repeat: inherit;
-  -webkit-mask-position: inherit;
-  mask-position: inherit;
-  -webkit-mask-size: inherit;
-  mask-size: inherit;
-
-  /* strengthened the shadows and added a little blur */
-  box-shadow: inset 5px 5px 10px rgba(199, 207, 219, 0.95),
-    inset -5px -5px 10px rgba(255, 255, 255, 0.95);
-  border-radius: 3px;
-  filter: blur(0.3px);
+  content: ""; position: absolute; inset: 1;
+  -webkit-mask-image: inherit; mask-image: inherit;
+  -webkit-mask-repeat: inherit; mask-repeat: inherit;
+  -webkit-mask-position: inherit; mask-position: inherit;
+  -webkit-mask-size: inherit; mask-size: inherit;
+  box-shadow: inset 5px 5px 10px rgba(199,207,219,.95), inset -5px -5px 10px rgba(255,255,255,.95);
+  border-radius: 3px; filter: blur(.3px);
 }
+@media (max-width:360px){ .logo-emboss{ width:48px; height:48px; } }
 
-/* Very narrow screens - less */
-@media (max-width: 360px) {
-  .logo-emboss {
-    width: 48px;
-    height: 48px;
-  }
-}
+/* Preloader polish */
+#preloader { opacity: 1; visibility: visible; transition: opacity 3.1s ease, visibility 3.1s ease; }
+#preloader.is-hidden { opacity: 0; visibility: hidden; }
+.timer-card { opacity: 0; transform: translateY(8px); transition: opacity .71s ease .13s, transform .71s ease .13s; }
+body.preload-done .timer-card { opacity: 1; transform: none; }
 
-/* уважение к настройкам ОС */
-@media (prefers-reduced-motion: reduce) {
-  .prelogo {
-    animation: none;
-  }
-}
-
-/* чтобы во время прелоадера скролла не было */
-html.preload-lock,
-body.preload-lock {
-  overflow: hidden;
-}
-
-/* Прелоадер уже есть — усилим плавность */
-#preloader {
-  opacity: 1;
-  visibility: visible;
-  transition: opacity 3.1s ease, visibility 3.1s ease;
-}
-#preloader.is-hidden {
-  opacity: 0;
-  visibility: hidden;
-}
-
-/* Карточка: стартуем скрытой и слегка сдвинутой вниз */
-.timer-card {
-  opacity: 0;
-  transform: translateY(8px);
-  transition: opacity 0.71s ease 0.13s, transform 0.71s ease 0.13s; /* .1s задержка, чтобы не «перекусило» с прелоадером */
-}
-
-/* Как только JS добавил .preload-done на <body> — проявляем карточку */
-body.preload-done .timer-card {
-  opacity: 1;
-  transform: none;
-}
-
-.timer-card {
-  opacity: 0;
-  transform: translateY(8px);
-  transition: opacity 0.71s ease 0.13s, transform 0.71s ease 0.13s;
-}
-body.preload-done .timer-card {
-  opacity: 1;
-  transform: none;
-}
-
-/* настраиваем степень затемнения одной переменной */
-:root {
-  --prelogo-tint: 0.75;
-} /* 0..1: чем больше — тем темнее */
-
-/* обёртка анимирует «дыхание» */
-.prelogo-wrap {
-  position: relative;
-  width: 131px;
-  height: 131px;
-  display: inline-block;
-  animation: prelogo-breathe var(--prelogo-speed, 3.1s) ease-in-out infinite;
-}
-
-/* изображение — БЕЗ резких фильтров по умолчанию */
-.prelogo-img {
-  width: 100%;
-  height: 100%;
-  object-fit: contain;
+/* Prelogo */
+.prelogo-wrap { position: relative; width: 131px; height: 131px; display: inline-block;
+  animation: prelogo-breathe var(--prelogo-speed, 3.1s) ease-in-out infinite; }
+.prelogo-img { width: 100%; height: 100%; object-fit: contain;
   filter: drop-shadow(-6px -6px 16px #ffffff) drop-shadow(6px 6px 16px #dddddd);
-  transition: filter 0.6s ease; /* плавное потемнение */
-}
+  transition: filter .6s ease; }
+.prelogo-wrap.is-ready .prelogo-img { filter: brightness(.93) contrast(1.06)
+  drop-shadow(-6px -6px 16px #ffffff) drop-shadow(6px 6px 16px #dddddd); }
+@keyframes prelogo-breathe { 0%,100%{transform:scale(.98);} 50%{transform:scale(1.04);} }
 
-/* gently turn on the additional “veil” ONLY inside the logo form
-.prelogo-grad {
-  position: absolute;
-  inset: 0;
-  pointer-events: none;
-  background: radial-gradient(
-      130% 130% at 65% 35%,
-      rgba(166, 165, 165, 0.32),
-      rgba(132, 132, 132, 0) 70%
-    ),
-    linear-gradient(
-      180deg,
-      rgba(130, 130, 130, 0.28) 30%,
-      rgba(85, 85, 85, 0) 70%
-    );
-  opacity: 0; /* start: invisible */
-/*
-  mix-blend-mode: multiply;
-  transition: opacity 0.71s ease 2.7s; /* smooth appearance */
-/*
-  -webkit-mask-image: url("./mroldman_logo.png");
-  mask-image: url("./mroldman_logo.png");
-  -webkit-mask-repeat: no-repeat;
-  mask-repeat: no-repeat;
-  -webkit-mask-position: center;
-  mask-position: center;
-  -webkit-mask-size: contain;
-  mask-size: contain;
+/* Clickable overlay over the embossed logo (final) */
+.logo-link {
+  position: absolute; top: 14px; left: 14px;
+  width: 91px; height: 71px; z-index: 5; display: block; border-radius: 12px; cursor: pointer;
 }
-*/
-
-/* when the logo is ready: slightly darken the image itself + turn on the veil */
-.prelogo-wrap.is-ready .prelogo-img {
-  filter: brightness(0.93) contrast(1.06) drop-shadow(-6px -6px 16px #ffffff)
-    drop-shadow(6px 6px 16px #dddddd);
-}
-.prelogo-wrap.is-ready .prelogo-grad {
-  opacity: var(--prelogo-tint);
-}
-
-@keyframes prelogo-breathe {
-  0%,
-  100% {
-    transform: scale(0.98);
-  }
-  50% {
-    transform: scale(1.04);
-  }
-}
+.logo-link .logo-emboss { position: absolute; inset: 0; pointer-events: none; }
+.logo-emboss, .logo-emboss--inset { pointer-events: none !important; }
