@@ -20,11 +20,11 @@
 
 ## 📂 Структура
 ```
-project-root/
-├── index.html
-├── style.css
-├── script.js
-└── mroldman_logo.png   # логотип для .logo-link в карточке UI и #preloader эффектов
+app/static/
+    ├── index.html
+    ├── style.css
+    ├── script.js
+    └── mroldman_logo.png   # логотип для .logo-link в карточке UI и #preloader эффектов
 ```
 
 ## 🚀 Запуск локально

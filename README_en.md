@@ -20,11 +20,11 @@ This README explains **methods, decisions and how to run** the project for the d
 
 ## 📂 Structure
 ```
-project-root/
-├── index.html
-├── style.css
-├── script.js
-└── mroldman_logo.png   # logo for .logo-link in card & #preloader effects
+app/static/
+    ├── index.html
+    ├── style.css
+    ├── script.js
+    └── mroldman_logo.png   # logo for .logo-link in card & #preloader effects
 ```
 
 ## 🚀 Run locally
