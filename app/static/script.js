@@ -6,6 +6,14 @@
 
   if (preloader) document.documentElement.classList.add("preload-lock");
 
+  /**
+   * EN: Hides the preloader after ensuring a minimal visible time.
+   *     Removes scroll lock, triggers card fade-in, and then detaches the node.
+   * RU: Скрывает прелоадер после минимального времени показа.
+   *     Снимает блокировку прокрутки, включает плавное появление карточки и удаляет узел.
+   *
+   @returns {void}
+   */
   function hidePreloader() {
     if (!preloader || preloader.classList.contains("is-hidden")) return;
 
@@ -29,6 +37,11 @@
     const img = wrap?.querySelector(".prelogo-img");
     if (!wrap || !img) return;
 
+    /**
+     * EN: Marks preloader logo wrapper as ready to trigger breathing/fade animations.
+     * RU: Помечает обёртку логотипа как готовую, чтобы запустить «дыхание»/fade-анимации.
+     * @returns {void}
+     */
     function markReady() {
       wrap.classList.add("is-ready");
     }
@@ -83,6 +96,12 @@
   };
 
   // ===== DOM =====
+  /**
+   * EN: Shorthand for document.querySelector.
+   * RU: Короткая запись для document.querySelector.
+   * @param {string} sel
+   * @returns {Element|null}
+   */
   const $ = (sel) => document.querySelector(sel);
   const minutesInput = $("#minutes");
   const startPauseBtn = $("#startPause");
@@ -99,12 +118,24 @@
     document.documentElement.getAttribute("lang") ||
     "ru";
 
+  /**
+   * EN: Translate by key for current language and replace template variables {k}.
+   * RU: Возвращает перевод по ключу для текущего языка и подставляет переменные {k}.
+   * @param {string} key
+   * @param {Record<string,string|number>} [vars]
+   * @returns {string}
+   */
   function t(key, vars = {}) {
     let s = (dict[lang] && dict[lang][key]) || key;
     for (const k in vars) s = s.replace(`{${k}}`, vars[k]);
     return s;
   }
 
+  /**
+   * EN: Applies localized labels to all [data-i18n] elements and the Start/Pause button state.
+   * RU: Применяет локализованные подписи ко всем [data-i18n] и корректирует надпись кнопки Старт/Пауза.
+   * @returns {void}
+   */
   function setTexts() {
     document.querySelectorAll("[data-i18n]").forEach((el) => {
       const key = el.getAttribute("data-i18n");
@@ -124,6 +155,11 @@
     if (langToggle) langToggle.textContent = lang === "ru" ? "EN" : "RU";
   }
 
+  /**
+   * EN: Applies current language into DOM <html lang>, document title, messages and persists it.
+   * RU: Применяет текущий язык в <html lang>, заголовок документа, сообщения и сохраняет выбор.
+   * @returns {void}
+   */
   function applyLang() {
     document.documentElement.setAttribute("lang", lang);
     document.title = dict[lang].title;
@@ -157,10 +193,21 @@
   let endLock = false; // blocking Start after completion
   let hasStartedOnce = false; // was there at least one launch (to activate Restart)
 
+  /**
+   * EN: Update Start/Pause button's disabled state based on endLock.
+   * RU: Обновляет состояние блокировки кнопки Старт/Пауза в зависимости от endLock.
+   * @returns {void}
+   */
   function updateStartLock() {
     startPauseBtn.disabled = endLock;
     startPauseBtn.setAttribute("aria-disabled", String(endLock));
   }
+
+  /**
+   * EN: Enable/disable Restart button: available only after the first launch.
+   * RU: Включает/выключает кнопку Перезапуска: доступна только после первого запуска.
+   * @returns {void}
+   */
   function updateRestartState() {
     restartBtn.disabled = !hasStartedOnce; // before the first start - off
     restartBtn.setAttribute("aria-disabled", String(!hasStartedOnce));
@@ -173,10 +220,30 @@
   let last15Shown = false;
 
   const RED_THRESHOLD_SEC = 15;
+  /**
+   * EN: Returns the orange zone threshold in seconds (last quarter of total duration).
+   * RU: Возвращает порог оранжевой зоны в секундах (последняя четверть длительности).
+   * @returns {number}
+   */
   const orangeZone = () => Math.floor(totalSeconds * 0.25);
 
   // ===== Utils =====
+  /**
+   * EN: Clamp number into [min, max].
+   * RU: Ограничивает число в диапазон [min, max].
+   * @param {number} n
+   * @param {number} min
+   * @param {number} max
+   * @returns {number}
+   */
   const clamp = (n, min, max) => Math.max(min, Math.min(max, n));
+
+  /**
+   * EN: Format seconds into "MM:SS".
+   * RU: Форматирует секунды в строку "MM:SS".
+   * @param {number} s
+   * @returns {string}
+   */
   const fmt = (s) => {
     s = Math.max(0, s | 0);
     const m = Math.floor(s / 60);
@@ -184,6 +251,12 @@
     return String(m).padStart(2, "0") + ":" + String(sec).padStart(2, "0");
   };
 
+  /**
+   * EN: Clears current sticky message if key matches or if no key provided (clear any).
+   * RU: Очищает закреплённое сообщение по ключу или любое, если ключ не указан.
+   * @param {string|null} [key]
+   * @returns {void}
+   */
   function clearMessageIf(key) {
     if (stickyKey && (!key || stickyKey === key)) {
       messagesEl.innerHTML = "";
@@ -191,6 +264,14 @@
     }
   }
 
+  /**
+   * EN: Shows message of a kind with optional timeout or sticky mode.
+   * RU: Показывает сообщение заданного типа с опциональным таймаутом или как «закреплённое».
+   * @param {"good"|"info"|"warn"|"err"} kind
+   * @param {string} text
+   * @param {{timeoutMs?:number, sticky?:boolean, key?:string|null}} [opts]
+   * @returns {void}
+   */
   function showMessage(kind, text, opts = {}) {
     const { timeoutMs = 5000, sticky = false, key = null } = opts;
     if (hideMsgTimer) {
@@ -211,6 +292,11 @@
     }
   }
 
+  /**
+   * EN: Re-show current sticky message (after language change) and adjust ring/overlay styles for paused state.
+   * RU: Переотображает текущее закреплённое сообщение (после смены языка) и корректирует стили кольца/оверлея для паузы.
+   * @returns {void}
+   */
   function refreshStickyMessage() {
     if (!stickyKey) return;
     if (stickyKey === "ready") {
@@ -233,6 +319,11 @@
     }
   }
 
+  /**
+   * EN: Computes remaining seconds based on start time, pauses and current wall clock.
+   * RU: Вычисляет оставшиеся секунды по времени старта, паузам и текущему времени.
+   * @returns {number}
+   */
   function computeRemainingSec() {
     const now = Date.now();
     const elapsedMs =
@@ -240,6 +331,12 @@
     return Math.max(0, totalSeconds - Math.floor(elapsedMs / 1000));
   }
 
+  /**
+   * EN: Adjusts ring/overlay styles depending on remaining time (green/orange/red zones).
+   * RU: Настраивает стили кольца/оверлея в зависимости от остатка времени (зелёная/оранжевая/красная зоны).
+   * @param {number} remaining
+   * @returns {void}
+   */
   function setStrokeByRemaining(remaining) {
     const inRed = remaining <= RED_THRESHOLD_SEC;
     const inOrange = remaining <= orangeZone() && !inRed;
@@ -262,6 +359,12 @@
     }
   }
 
+  /**
+   * EN: Render visual progress and the time label; handles paused styling when applicable.
+   * RU: Рендерит визуальный прогресс и подпись времени; при необходимости показывает стиль паузы.
+   * @param {number} remaining
+   * @returns {void}
+   */
   function render(remaining) {
     const offset = CIRC * (remaining / totalSeconds);
     progressCircle.style.strokeDashoffset = isFinite(offset)
@@ -279,6 +382,13 @@
     setStrokeByRemaining(remaining);
   }
 
+  /**
+   * EN: Starts the timer for a given number of minutes. Resets state, schedules ticks and shows a start message.
+   * RU: Запускает таймер на указанное число минут. Сбрасывает состояние, запускает тики и показывает сообщение о старте.
+   * @param {number} min - EN: minutes (1–99); RU: минуты (1–99)
+   * @returns {void}
+   * @throws {Error} EN: if minutes are invalid (handled by caller); RU: при некорректном вводе (обрабатывается вызывающим кодом)
+   */
   function startFromMinutes(min) {
     if (!hasStartedOnce) {
       hasStartedOnce = true;
@@ -305,6 +415,11 @@
     showMessage("good", t("msgStarted"), { timeoutMs: 5000 });
   }
 
+  /**
+   * EN: Main loop: computes remaining time, fires minute/15s alerts, renders and handles completion.
+   * RU: Главный цикл: считает остаток, показывает минутные/15-сек предупреждения, рендерит и завершает при нуле.
+   * @returns {void}
+   */
   function tick() {
     const remaining = computeRemainingSec();
 
@@ -351,6 +466,7 @@
     }
   }
 
+  // === Controls ===
   startPauseBtn.addEventListener("click", () => {
     if (endLock) return;
 

@@ -1,3 +1,15 @@
+/*
+  Project: Animated Timer (Diploma) / Анимированный Таймер (Диплом)
+  Files: index.html, style.css, script.js
+  Author / Автор: Mr.OLDMAN
+  GitHub: https://github.com/whoisoldman/whoisoldman.github.io
+  Year / Год: 2025
+  License / Лицензия: MIT (see LICENSE / см. LICENSE)
+
+  EN: Styles for the neumorphic UI, circular progress ring, preloader, alerts, and dark theme.
+  RU: Стили для нейроморфного UI, кругового прогресса, прелоадера, предупреждений и светлой темы.
+*/
+
 html,
 body {
   font-family: -apple-system, BlinkMacSystemFont, "SF Pro Text", "SF Pro Display",
