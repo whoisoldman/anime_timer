@@ -5,3 +5,17 @@ __pycache__/
 .env
 node_modules/
 dist/
+
+# macOS
+.DS_Store
+
+# Editors/IDE
+.vscode/
+.idea/
+
+# Python/misc (на всякий)
+*.log
+pytest_cache/
+.mypy_cache/
+.coverage
+htmlcov/
