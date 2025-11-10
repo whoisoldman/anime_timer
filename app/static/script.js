@@ -1,3 +1,12 @@
+/**
+ * Project: Animated Timer (Diploma) / Анимированный Таймер (Диплом)
+ * Files: index.html, style.css, script.js
+ * Author / Автор: Mr.OLDMAN
+ * GitHub: https://github.com/whoisoldman/whoisoldman.github.io
+ * Year / Год: 2025
+ * License / Лицензия: MIT (see LICENSE / см. LICENSE)
+ */
+
 (() => {
   // ==== Preloader control ====
   const preloader = document.getElementById("preloader");
