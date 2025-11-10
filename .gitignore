@@ -14,7 +14,7 @@ dist/
 .vscode/
 .idea/
 
-# Python/misc (на всякий)
+# Python/misc
 *.log
 pytest_cache/
 .mypy_cache/
