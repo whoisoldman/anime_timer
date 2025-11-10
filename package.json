@@ -1,10 +1,10 @@
 {
   "name": "animated-timer",
   "version": "1.0.0",
-  "description": "Учебный проект: анимированный таймер (неоморфизм)",
+  "description": "Дипломный проект: Анимированный таймер / Diploma Project: Animated Timer ",
   "scripts": {
     "start": "npx serve -p 5173 ."
   },
   "devDependencies": {},
-  "license": "MIT"
+  "license": "MIT (c) 2025, Aleksei N. Andeev (Mr.OLDMAN)"
 }
